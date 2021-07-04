@@ -9,7 +9,7 @@ const userSchema = new mongoose.Schema({
     estimatedTime : {type : String , required : true  },
     sprint : {type : String , required : true  },
     typeField : {type : String , required : true  }
-})
+},{timestamps : true})
 
 const User = mongoose.model('User',userSchema)
 
