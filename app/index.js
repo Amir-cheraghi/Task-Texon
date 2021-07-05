@@ -4,11 +4,13 @@ const app = express()
 const mongoose = require('mongoose')
 
 const apiRoute = require('./routes/apiRoute')
+const checkToken = require('./helpers/checkJWT')
 const {httpStatus} = require('./helpers/values')
 module.exports =  class application {
     constructor(){
         this.setDB()
         this.setConfig()
+        this.checkJWT()
         this.setRoute()
         this.set404()
         this.setExpress()
@@ -47,6 +49,10 @@ module.exports =  class application {
         app.listen(process.env.SERVER_PORT,process.env.SERVER_ADDRESS,()=>{
             console.log(`Server Is Running In Port : ${process.env.SERVER_PORT} # # #`)
         })
+    }
+
+    checkJWT(){
+        app.use('/',checkToken)
     }
 
 }
