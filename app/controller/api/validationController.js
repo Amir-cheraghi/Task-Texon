@@ -45,6 +45,11 @@ module.exports = new class validator{
 
     editProjectCheck(req,res,next){
         return[
+            check('status')
+            .custom((input)=>{
+                return [projectStatus.deadLineHasExpired , projectStatus.thereIsADeadLine].indexOf(input) !== -1
+            })
+            .withMessage(`The Status must be one of : [${projectStatus.deadLineHasExpired} , ${projectStatus.thereIsADeadLine}]`),
             check('estimatedTime')
             .isDate()
             .withMessage('Estimated time must be in Date format like YYYY-MM-DD')
@@ -80,16 +85,17 @@ module.exports = new class validator{
 
     editProjectResult(req,res,next){
         const error = validationResult(req).array()
-            const errorMessage = error.map(el=>{ if(typeof el.value !='undefined') return el.msg })
-            errorMessage.forEach((el,i)=>{
-                if(typeof el == 'undefined') errorMessage.splice(i,i+1)
-            })
-            console.log(errorMessage)
-            if(errorMessage.length)
+            const msg = []
+            for(let i = 0 ; i<error.length ; i++){
+                console.log(error[0])
+                if(typeof error[i].value == "undefined") continue
+                msg.push(error[i].msg)
+            }
+            if(msg.length)
             return res.status(httpStatus.badRequest).json({
                 status : 'Validation error',
                 msg : 'The entered data is not valid , please fix errors',
-                error : errorMessage
+                error : msg
             })
         return next()
     }
