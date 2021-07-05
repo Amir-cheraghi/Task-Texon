@@ -6,7 +6,7 @@ const adminController = require('./../controller/api/adminController')
 const validationController = require('./../controller/api/validationController')
 
 
-router.route('/index')
+router.route('/profile')
 .get(routeController.showIndex)
 
 router.route('/login')
@@ -17,4 +17,7 @@ router.route('/register')
 
 router.route('/user/project')
 .post(validationController.projectCheck(), validationController.projectValidation , userController.createProject)
+
+router.route('/user/project/:id')
+.delete(userController.deleteProject)
 module.exports = router
