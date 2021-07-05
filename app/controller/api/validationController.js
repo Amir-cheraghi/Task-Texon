@@ -36,7 +36,12 @@ module.exports = new class validator{
             .isDate()
             .withMessage('Estimated time must be in Date format like YYYY-MM-DD')
             .notEmpty()
-            .withMessage('Estimated time must provided'),
+            .withMessage('Estimated time must provided')
+            .custom(input=>{
+                return new Date(input).getTime() > new Date(Date.now()).getTime()
+            })
+            .withMessage('Estimated time must higher than now date')
+            ,
             check('sprint')
             .notEmpty()
             .withMessage('sprint must provided')
