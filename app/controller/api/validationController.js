@@ -1,5 +1,5 @@
 const {check,validationResult} = require('express-validator')
-const {httpStatus} = require('./../../helpers/values')
+const {httpStatus,projectStatus, projectTypeField} = require('./../../helpers/values')
 module.exports = new class validator{
     loginOrRegisterCheck(req,res,next){
         return [
@@ -26,6 +26,43 @@ module.exports = new class validator{
                 error : errorMessage
             })
             
+        }
+        return next()
+    }
+
+    projectCheck(req,res,next){
+        return[
+            check('estimatedTime')
+            .isDate()
+            .withMessage('Estimated time must be in Date format like YYYY-MM-DD')
+            .notEmpty()
+            .withMessage('Estimated time must provided'),
+            check('sprint')
+            .notEmpty()
+            .withMessage('sprint must provided')
+            .custom((input)=>{
+                return (0<+input<100)
+            })
+            .withMessage('sprint must be between 0 and 100 like a percent'),
+            check('typeField')
+            .notEmpty()
+            .withMessage('priority must provided')
+            .custom((input)=>{
+                return [projectTypeField.emergency , projectTypeField.normal , projectTypeField.notImportant].indexOf(input) !== -1
+            })
+            .withMessage(`The priority must be one of : [${projectTypeField.emergency} , ${projectTypeField.normal} , ${projectTypeField.notImportant}]`)
+        ]
+    }
+
+    projectValidation(req,res,next){
+        const error = validationResult(req).array()
+        if(error.length){
+            const errorMessage = error.map(el=>el.msg)
+            return res.status(httpStatus.badRequest).json({
+                status : 'Validation error',
+                msg : 'The entered data is not valid , please fix errors',
+                error : errorMessage
+            })
         }
         return next()
     }

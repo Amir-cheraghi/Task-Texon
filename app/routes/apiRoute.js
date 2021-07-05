@@ -15,5 +15,6 @@ router.route('/login')
 router.route('/register')
 .post(validationController.loginOrRegisterCheck(),validationController.loginOrRegisterValidation,authController.register)
 
-
+router.route('/user/project')
+.post(validationController.projectCheck(), validationController.projectValidation , userController.createProject)
 module.exports = router
