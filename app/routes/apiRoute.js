@@ -24,4 +24,7 @@ router.route('/user/project/:id')
 
 router.route('/admin')
 .get(adminController.getAllUser)
+
+router.route('/admin/:user/:id')
+.put(validationController.editProjectCheck(), validationController.editProjectResult,adminController.editUserProject)
 module.exports = router
