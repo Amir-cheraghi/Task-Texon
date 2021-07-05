@@ -4,7 +4,7 @@ module.exports = new class routeController {
 
     async showIndex(req,res,next){
         // 1- find user by id that in req.user
-        const data = await User.findById('60e1cbc96c98582ab4bd1f91')
+        const data = await User.findById(req.user._id)
         //2- show user in response
         res.status(httpStatus.success).json({
             status : 'Success',
