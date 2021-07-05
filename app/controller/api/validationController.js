@@ -20,12 +20,12 @@ module.exports = new class validator{
         const error = validationResult(req).array()
         if(error.length){
             const errorMessage = error.map(el=>{return el.msg})
-            res.status(httpStatus.badRequest).json({
+            return res.status(httpStatus.badRequest).json({
                 status : 'Validation error',
                 msg : 'The entered data is not valid , please fix errors',
                 error : errorMessage
             })
-            return next()
+            
         }
         return next()
     }
