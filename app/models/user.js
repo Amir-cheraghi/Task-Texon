@@ -11,7 +11,8 @@ const userSchema = new mongoose.Schema({
             estimatedTime : {type : Date},
             sprint : {type : Number},
             endingTimeBySprint : {type : Date},
-            typeField : {type : String , enum : ['emergency' , 'normal' , 'not important']}
+            typeField : {type : String , enum : ['emergency' , 'normal' , 'not important']},
+            createdAt : {type : Date , default : Date.now()}   
         }
     ]
     
