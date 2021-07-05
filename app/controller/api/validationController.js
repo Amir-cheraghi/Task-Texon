@@ -26,14 +26,11 @@ module.exports = new class validator{
             .custom(input=>{
                 return new Date(input).getTime() > new Date(Date.now()).getTime()
             })
-            .withMessage('Estimated time must higher than now date')
-            ,
+            .withMessage('Estimated time must higher than now date'),
             check('sprint')
             .notEmpty()
             .withMessage('sprint must provided')
-            .custom((input)=>{
-                return (0<+input<100)
-            })
+            .isFloat({min:0 , max : 100})
             .withMessage('sprint must be between 0 and 100 like a percent'),
             check('typeField')
             .notEmpty()
@@ -45,6 +42,26 @@ module.exports = new class validator{
         ]
     }
 
+
+    editProjectCheck(req,res,next){
+        return[
+            check('estimatedTime')
+            .isDate()
+            .withMessage('Estimated time must be in Date format like YYYY-MM-DD')
+            .custom(input=>{
+                return new Date(input).getTime() > new Date(Date.now()).getTime()
+            })
+            .withMessage('Estimated time must higher than now date'),
+            check('sprint')
+            .isFloat({min:0 , max : 100})
+            .withMessage('sprint must be between 0 and 100 like a percent'),
+            check('typeField')
+            .custom((input)=>{
+                return [projectTypeField.emergency , projectTypeField.normal , projectTypeField.notImportant].indexOf(input) !== -1
+            })
+            .withMessage(`The priority must be one of : [${projectTypeField.emergency} , ${projectTypeField.normal} , ${projectTypeField.notImportant}]`)
+        ]
+    }
     
     
     validationResult(req,res,next){
@@ -58,6 +75,22 @@ module.exports = new class validator{
             })
             
         }
+        return next()
+    }
+
+    editProjectResult(req,res,next){
+        const error = validationResult(req).array()
+            const errorMessage = error.map(el=>{ if(typeof el.value !='undefined') return el.msg })
+            errorMessage.forEach((el,i)=>{
+                if(typeof el == 'undefined') errorMessage.splice(i,i+1)
+            })
+            console.log(errorMessage)
+            if(errorMessage.length)
+            return res.status(httpStatus.badRequest).json({
+                status : 'Validation error',
+                msg : 'The entered data is not valid , please fix errors',
+                error : errorMessage
+            })
         return next()
     }
 
