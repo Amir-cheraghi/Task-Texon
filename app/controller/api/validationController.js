@@ -87,7 +87,6 @@ module.exports = new class validator{
         const error = validationResult(req).array()
             const msg = []
             for(let i = 0 ; i<error.length ; i++){
-                console.log(error[0])
                 if(typeof error[i].value == "undefined") continue
                 msg.push(error[i].msg)
             }

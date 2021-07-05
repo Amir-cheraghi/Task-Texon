@@ -57,7 +57,6 @@ module.exports = new (class adminController {
           data 
         })
     } catch (err) {
-      console.log(err)
       //1-Check error not empty
       if (!err.code || !err.status || !err.msg) {
         err = {

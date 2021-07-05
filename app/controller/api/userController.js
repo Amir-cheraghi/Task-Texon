@@ -77,7 +77,6 @@ module.exports = new (class userController {
 
         // 3- edit Data 
         const project = user.projects[projectsId.indexOf(req.params.id)]
-        console.log(project)
         project.sprint = req.body.sprint || project.sprint
         project.typeField = req.body.typeField || project.typeField
         project.estimatedTime = req.body.estimatedTime || project.estimatedTime
