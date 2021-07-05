@@ -10,7 +10,7 @@ router.route('/index')
 .get(routeController.showIndex)
 
 router.route('/login')
-.post(validationController.loginCheck(),validationController.loginValidation,authController.login)
+.post(validationController.loginOrRegisterCheck(),validationController.loginOrRegisterValidation,authController.login)
 
 
 module.exports = router

@@ -1,7 +1,7 @@
 const {check,validationResult} = require('express-validator')
 const {httpStatus} = require('./../../helpers/values')
 module.exports = new class validator{
-    loginCheck(req,res,next){
+    loginOrRegisterCheck(req,res,next){
         return [
             check('username')
             .notEmpty()
@@ -16,7 +16,7 @@ module.exports = new class validator{
         ]
     }
 
-    loginValidation(req,res,next){
+    loginOrRegisterValidation(req,res,next){
         const error = validationResult(req).array()
         if(error.length){
             const errorMessage = error.map(el=>{return el.msg})
@@ -29,4 +29,6 @@ module.exports = new class validator{
         }
         return next()
     }
+
+
 }
