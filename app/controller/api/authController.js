@@ -4,22 +4,23 @@ const jwt = require("jsonwebtoken");
 module.exports = new (class authController {
   async login(req, res, next) {
     try {
+      const{username , password} = req.body
       //1-Find user
-      const user = await User.findOne({ username: req.body.username })
+      const user = await User.findOne({ username})
 
       // 2-Check user exists
       if (!user) 
         throw {code: httpStatus.badRequest,status: "Login error",msg: "User or password is not incorrect"}
 
       // 3- Check user password
-      if (user.password != req.body.password)
+      if (!await user.comparePassword(password,user.password))
         throw {code: httpStatus.badRequest,status: "Login error",msg: "User or password is not incorrect"}
 
       // 4- Sing a jwt token
       const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET ,{expiresIn : process.env.JWT_EXPIRE})
 
       // 5- Send result
-      res.status(httpStatus.success).json({
+      return res.status(httpStatus.success).json({
         status: "success",
         msg: "Login successfully",
         data: {...user._doc , token}
@@ -35,7 +36,7 @@ module.exports = new (class authController {
         }
       }
       // 2- Send error
-      res.status(err.code).json({
+      return res.status(err.code).json({
         status: err.status,
         msg: err.msg,
       })
@@ -61,7 +62,7 @@ module.exports = new (class authController {
       })
 
       // 4- Send response 
-      res.status(httpStatus.success).json({
+      return res.status(httpStatus.success).json({
         status : 'success',
         msg : 'User successfully created',
         data
@@ -76,7 +77,7 @@ module.exports = new (class authController {
         }
       }
       // 2- Send error
-      res.status(err.code).json({
+      return res.status(err.code).json({
         status: err.status,
         msg: err.msg,
       })
