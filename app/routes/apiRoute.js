@@ -12,5 +12,8 @@ router.route('/index')
 router.route('/login')
 .post(validationController.loginOrRegisterCheck(),validationController.loginOrRegisterValidation,authController.login)
 
+router.route('/register')
+.post(validationController.loginOrRegisterCheck(),validationController.loginOrRegisterValidation,authController.register)
+
 
 module.exports = router
