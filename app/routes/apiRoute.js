@@ -10,13 +10,13 @@ router.route('/profile')
 .get(routeController.showIndex)
 
 router.route('/login')
-.post(validationController.loginOrRegisterCheck(),validationController.loginOrRegisterValidation,authController.login)
+.post(validationController.loginOrRegisterCheck(),validationController.validationResult,authController.login)
 
 router.route('/register')
-.post(validationController.loginOrRegisterCheck(),validationController.loginOrRegisterValidation,authController.register)
+.post(validationController.loginOrRegisterCheck(),validationController.validationResult,authController.register)
 
 router.route('/user/project')
-.post(validationController.projectCheck(), validationController.projectValidation , userController.createProject)
+.post(validationController.projectCheck(), validationController.validationResult , userController.createProject)
 
 router.route('/user/project/:id')
 .delete(userController.deleteProject)

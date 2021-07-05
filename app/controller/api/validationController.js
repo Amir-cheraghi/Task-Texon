@@ -16,20 +16,6 @@ module.exports = new class validator{
         ]
     }
 
-    loginOrRegisterValidation(req,res,next){
-        const error = validationResult(req).array()
-        if(error.length){
-            const errorMessage = error.map(el=>{return el.msg})
-            return res.status(httpStatus.badRequest).json({
-                status : 'Validation error',
-                msg : 'The entered data is not valid , please fix errors',
-                error : errorMessage
-            })
-            
-        }
-        return next()
-    }
-
     projectCheck(req,res,next){
         return[
             check('estimatedTime')
@@ -59,15 +45,18 @@ module.exports = new class validator{
         ]
     }
 
-    projectValidation(req,res,next){
+    
+    
+    validationResult(req,res,next){
         const error = validationResult(req).array()
         if(error.length){
-            const errorMessage = error.map(el=>el.msg)
+            const errorMessage = error.map(el=>{return el.msg})
             return res.status(httpStatus.badRequest).json({
                 status : 'Validation error',
                 msg : 'The entered data is not valid , please fix errors',
                 error : errorMessage
             })
+            
         }
         return next()
     }
